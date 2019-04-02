@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Libreta</string>
+    <string name="action_settings">Settings</string>
+    <string name="text_central">Prueba</string>
+    <string name="cambia">Cambia</string>
+    <string name="titulo">Título</string>
+    <string name="escribe_una_nota">Escribe una nota</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="deleteItem">Borrar nota</string>
+</resources>
