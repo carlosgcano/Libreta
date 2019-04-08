@@ -7,4 +7,8 @@
     <string name="escribe_una_nota">Escribe una nota</string>
     <string name="title_activity_settings">Settings</string>
     <string name="deleteItem">Borrar nota</string>
+    <string name="notes">Notas</string>
+    <string name="lists">Listas</string>
+    <string name="tab_name_lists">Listas</string>
+    <string name="tab_name_notes">Notas</string>
 </resources>

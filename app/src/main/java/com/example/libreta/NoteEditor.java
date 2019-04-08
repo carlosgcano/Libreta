@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Main2Activity extends AppCompatActivity {
+public class NoteEditor extends AppCompatActivity {
 
     EditText title;
     EditText body_text;
@@ -34,7 +34,7 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.note_editor);
 
         title = findViewById(R.id.title);
         body_text = findViewById(R.id.body_text);
@@ -68,7 +68,7 @@ public class Main2Activity extends AppCompatActivity {
 
                 //Alert dialog if title is empty
                 if (TextUtils.isEmpty(title.getText().toString())) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(Main2Activity.this);
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(NoteEditor.this);
                     dialog.setTitle("Precaución");
                     dialog.setMessage("Se va a guardar la nota sin título");
                     dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
