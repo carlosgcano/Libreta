@@ -11,4 +11,6 @@
     <string name="lists">Listas</string>
     <string name="tab_name_lists">Listas</string>
     <string name="tab_name_notes">Notas</string>
+    <string name="new_task">Nueva Tarea</string>
+    <string name="new_task_button">Añadir</string>
 </resources>

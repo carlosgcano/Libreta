@@ -43,7 +43,9 @@ public class NoteLister extends Fragment {
         lista.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
+
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
 
                         String Templistview = listItems.get(position);
                         Templistview = Templistview.substring(0, Templistview.lastIndexOf('.'));

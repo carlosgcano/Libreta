@@ -1,38 +1,43 @@
 package com.example.libreta;
 
-import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListLister extends Fragment {
 
     private ListView lista;
     private ArrayAdapter<String> listAdapter;
 
+    ListsDatabase db;
+
+    ArrayList<String> listItems;
+    ArrayAdapter adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.note_list, container, false);
+        View view = inflater.inflate(R.layout.lists_list, container, false);
 
+        db = new ListsDatabase(this.getContext());
+        Log.w("myApp", "Entra");
+        fillData();
+        
         //Fill the note list
-        lista = view.findViewById(R.id.lista_libreta);
+        lista = view.findViewById(R.id.list_lists_listview);
+
+
+        /**
         //The folder Libreta must be created
         final List<String> listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
         listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
@@ -44,7 +49,6 @@ public class ListLister extends Fragment {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                         String Templistview = listItems.get(position);
                         Templistview = Templistview.substring(0, Templistview.lastIndexOf('.'));
                         Intent intent = new Intent(ListLister.this.getActivity(), NoteEditor.class);
@@ -54,15 +58,33 @@ public class ListLister extends Fragment {
                     }
                 }
         );
-
+         **/
         return view;
+    }
+
+    private void fillData() {
+
+        Cursor cursor = db.getLists();
+
+        if (cursor.getCount() == 0) {
+
+            Toast.makeText(this.getContext(), "No hay datos", Toast.LENGTH_SHORT).show();
+
+        } else {
+            while (cursor.moveToNext()) {
+                listItems.add(cursor.getString(0));
+            }
+
+            listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
+            lista.setAdapter(listAdapter);
+        }
     }
 
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
     }
-
+/**
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
@@ -91,7 +113,7 @@ public class ListLister extends Fragment {
         final List<String> listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
         listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
         lista.setAdapter(listAdapter);
-        Log.w("myApp", "Tamaño: " + listItems.size());
+
     }
 
     private List<String> getList(File directory) {
@@ -116,5 +138,5 @@ public class ListLister extends Fragment {
             Toast.makeText(this.getActivity(), "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
         }
     }
-
+ **/
 }
