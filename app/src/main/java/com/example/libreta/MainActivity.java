@@ -10,12 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
-
+    TabLayout tabLayout;
 
     private ListView lista;
     private ArrayAdapter<String> listAdapter;
@@ -33,14 +34,19 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        //Create new note
+        //Create new note or task
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                startEditor();
+                Integer tab = tabLayout.getSelectedTabPosition();
+
+                //Log.w("myApp", tab.toString());
+
+                startEditor(tab);
 
             }
         });
@@ -57,10 +63,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void startEditor() {
-        Intent intent = new Intent(this, NoteEditor.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    public void startEditor(Integer tab) {
+        Intent intent;
+        if (tab == 0) {
+            intent = new Intent(this, NoteEditor.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        } else if (tab == 1) {
+            intent = new Intent(this, ListEditor.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        } else {
+            Toast.makeText(this, "Exception. Tab number exceeded: " + tab.toString(), Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
     private void setupViewPager(ViewPager viewPager) {

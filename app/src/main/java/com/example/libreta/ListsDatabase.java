@@ -37,11 +37,13 @@ public class ListsDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(String name) {
+    public boolean insertData(String task) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Task, name);
+        //contentValues.put(Checked, "Disable");
+        contentValues.put(Task, task);
+
 
         long result = db.insert(DB_table, null, contentValues);
 
