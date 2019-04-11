@@ -13,4 +13,7 @@
     <string name="tab_name_notes">Notas</string>
     <string name="new_task">Nueva Tarea</string>
     <string name="new_task_button">Añadir</string>
+    <string name="name_list">Nombre lista</string>
+    <string name="deleteTask">Eliminar tarea</string>
+    <string name="deleteList">Eliminar tarea</string>
 </resources>

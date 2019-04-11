@@ -23,7 +23,7 @@ import java.util.List;
 
 public class NoteLister extends Fragment {
 
-    private ListView lista;
+    private ListView noteList;
     private ArrayAdapter<String> listAdapter;
 
     @Override
@@ -32,15 +32,15 @@ public class NoteLister extends Fragment {
         View view = inflater.inflate(R.layout.note_list, container, false);
 
         //Fill the note list
-        lista = view.findViewById(R.id.lista_libreta);
+        noteList = view.findViewById(R.id.lista_libreta);
         //The folder Libreta must be created
         final List<String> listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
         listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
-        lista.setAdapter(listAdapter);
+        noteList.setAdapter(listAdapter);
 
-        registerForContextMenu(lista);
+        registerForContextMenu(noteList);
 
-        lista.setOnItemClickListener(
+        noteList.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
 
@@ -68,7 +68,7 @@ public class NoteLister extends Fragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.main_context_menu, menu);
+        inflater.inflate(R.menu.main_context_menu_note_list, menu);
     }
 
     //Delete item on note list
@@ -77,12 +77,12 @@ public class NoteLister extends Fragment {
         switch (item.getItemId()) {
             case R.id.delete_id:
                 int pos = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
-                String name = (String) lista.getItemAtPosition(pos);
+                String name = (String) noteList.getItemAtPosition(pos);
                 deleteNote(name);
 
                 final List<String> listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
                 listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
-                lista.setAdapter(listAdapter);
+                noteList.setAdapter(listAdapter);
             default:
                 return super.onContextItemSelected(item);
         }
@@ -92,7 +92,7 @@ public class NoteLister extends Fragment {
         super.onResume();
         final List<String> listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
         listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
-        lista.setAdapter(listAdapter);
+        noteList.setAdapter(listAdapter);
         Log.w("myApp", "Tamaño: " + listItems.size());
     }
 
