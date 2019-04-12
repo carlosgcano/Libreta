@@ -74,7 +74,7 @@ public class ListsDatabase extends SQLiteOpenHelper {
     public Cursor viewList() {
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT TASK FROM " + DB_table;
+        String query = "SELECT TASK,CHECKED FROM " + DB_table;
         Cursor cursor = db.rawQuery(query, null);
 
         return cursor;
@@ -96,5 +96,33 @@ public class ListsDatabase extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         return cursor;
+    }
+
+    public void updateTask(String list, String task, boolean checked) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String strSQL;
+
+        if (checked) {
+            strSQL = "UPDATE Lists SET CHECKED = 'Enable' WHERE TASK = '" + task + "'";
+        } else {
+            strSQL = "UPDATE Lists SET CHECKED = 'Disable' WHERE TASK = '" + task + "'";
+        }
+        db.execSQL(strSQL);
+
+    }
+
+    public boolean taskExistOnList(String table, String task) {
+        boolean res = true;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        String sql = "SELECT TASK FROM '" + DB_table + "' WHERE TASK='" + task + "'";
+        cursor = db.rawQuery(sql, null);
+
+        if (cursor.getCount() == 0) {
+            res = false;
+        }
+        cursor.close();
+        return res;
     }
 }

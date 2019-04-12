@@ -18,6 +18,7 @@
             android:layout_weight="1"
             android:inputType="text"
             android:singleLine="true"
+            android:gravity="center"
             android:text="@string/name_list" />
 
 
@@ -43,8 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
-            android:singleLine="true"
-            android:text="@string/new_task" />
+            android:singleLine="true" />
 
         <Button
             android:id="@+id/new_task_button"
