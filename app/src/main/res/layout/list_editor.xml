@@ -19,7 +19,7 @@
             android:inputType="text"
             android:singleLine="true"
             android:gravity="center"
-            android:text="@string/name_list" />
+            android:hint="@string/name_list" />
 
 
     </LinearLayout>
@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
+            android:hint="@string/new_task"
             android:singleLine="true" />
 
         <Button

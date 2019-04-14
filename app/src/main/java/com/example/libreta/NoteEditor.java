@@ -40,7 +40,7 @@ public class NoteEditor extends AppCompatActivity {
         body_text = findViewById(R.id.body_text);
 
         //Load a note if exist
-        String tempholder = getIntent().getStringExtra("Titulo");
+        String tempholder = getIntent().getStringExtra("Title");
         if (!TextUtils.isEmpty(tempholder)) {
             title.setText(tempholder);
             File fichero = new File(raiz, tempholder + ".txt");
@@ -75,7 +75,6 @@ public class NoteEditor extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
-                            //String ahora_text = sdf.format(new Date()).g;
                             String titleText = sdf.format(new Date());
                             title.setText(titleText);
                             Save();

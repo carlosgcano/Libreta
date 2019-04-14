@@ -10,22 +10,12 @@ import android.util.Log;
 public class ListsDatabase extends SQLiteOpenHelper {
 
     private static final String DB_Name = "Lists.db";
-    private static final String DB_table = "Lists";
-
+    private String DB_table = "Lists";
     //Columns
     private static final String ID = "ID";
     private static final String Task = "TASK";
     private static final String Checked = "CHECKED";
 
-    private static final String Create_table = "CREATE TABLE " + DB_table + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + Task + " TEXT, "
-            + Checked + "  TEXT )";
-
-    // private static final String Create_table = "CREATE TABLE " + DB_table +
-    //       " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-    //     + Task + " TEXT, "
-    //   + Checked + "TEXT "
-    // + ")";
 
     public ListsDatabase(Context context) {
         super(context, DB_Name, null, 1);
@@ -33,27 +23,46 @@ public class ListsDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(Create_table);
-        String sql =
-                "INSERT or replace INTO Lists (TASK,CHECKED) VALUES ('hola','disabled')";
-
-        ContentValues insertValues = new ContentValues();
-        insertValues.put("TASK", "hola");
-        insertValues.put("CHECKED", "Disable");
-        db.insert("Lists", null, insertValues);
 
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DB_table);
 
-        onCreate(db);
+    }
+
+    public void createTable(SQLiteDatabase db) {
+        String Create_table = "CREATE TABLE " + DB_table + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Task + " TEXT, "
+                + Checked + "  TEXT )";
+        db.execSQL(Create_table);
+    }
+
+    public boolean existTable() {
+        Boolean res = false;
+        Cursor cursor = getLists();
+        while (cursor.moveToNext()) {
+            if (cursor.getString(0).contains(DB_table)) {
+                res = true;
+                break;
+            }
+        }
+        cursor.close();
+        return res;
     }
 
     public boolean insertData(String task) {
-
+        Boolean aux = false;
         SQLiteDatabase db = this.getWritableDatabase();
+
+        setTableName();
+        //if table not exist we need to create the table
+        if (!existTable()) {
+            createTable(this.getWritableDatabase());
+        }
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(Checked, "Disable");
         contentValues.put(Task, task);
@@ -66,36 +75,38 @@ public class ListsDatabase extends SQLiteOpenHelper {
 
     public Cursor getLists() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT name FROM sqlite_temp_master WHERE type='table' AND name!='android_metadata' order by name";
+        String query = "SELECT name FROM sqlite_master WHERE type='table' AND name!='android_metadata' AND name!='sqlite_sequence' order by name";
         Cursor cursor = db.rawQuery(query, null);
+
         return cursor;
     }
 
     public Cursor viewList() {
 
+        Boolean aux = false;
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT TASK,CHECKED FROM " + DB_table;
-        Cursor cursor = db.rawQuery(query, null);
-
-        return cursor;
+        return db.rawQuery("SELECT TASK,CHECKED FROM " + DB_table, null);
     }
 
-    public boolean deleteTask(String list, String task) {
+    public boolean deleteList(String list) {
+        boolean res = false;
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM " + list + " WHERE TASK='" + task + "'";
-        Log.w("myApp", "TamañoTasks2: " + query);
-        //Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = getLists();
+        while (cursor.moveToNext()) {
+            if (cursor.getString(0).contains(list)) {
+                res = true;
+                db.execSQL("DROP TABLE IF EXISTS " + list);
+                break;
+            }
+        }
+        cursor.close();
+        return res;
 
-
-        return db.delete(list, "TASK=?", new String[]{task}) > 0;
     }
 
-    public Cursor deleteList(String list) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "DROP TABLE " + list;
-        Cursor cursor = db.rawQuery(query, null);
-
-        return cursor;
+    public boolean deleteTask(String task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(DB_table, "TASK=?", new String[]{task}) > 0;
     }
 
     public void updateTask(String list, String task, boolean checked) {
@@ -104,16 +115,17 @@ public class ListsDatabase extends SQLiteOpenHelper {
         String strSQL;
 
         if (checked) {
-            strSQL = "UPDATE Lists SET CHECKED = 'Enable' WHERE TASK = '" + task + "'";
+            strSQL = "UPDATE " + DB_table + " SET CHECKED = 'Enable' WHERE TASK = '" + task + "'";
         } else {
-            strSQL = "UPDATE Lists SET CHECKED = 'Disable' WHERE TASK = '" + task + "'";
+            strSQL = "UPDATE " + DB_table + " SET CHECKED = 'Disable' WHERE TASK = '" + task + "'";
         }
         db.execSQL(strSQL);
 
     }
 
-    public boolean taskExistOnList(String table, String task) {
+    public boolean taskExistOnList(String task) {
         boolean res = true;
+        Log.w("myApp", "El nombre de la lista en el existtable es:" + DB_table);
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         String sql = "SELECT TASK FROM '" + DB_table + "' WHERE TASK='" + task + "'";
@@ -124,5 +136,23 @@ public class ListsDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         return res;
+    }
+
+    public void setTableName() {
+        ListEditor le = new ListEditor();
+        DB_table = le.getListName();
+
+    }
+
+    public void changeTableNameOnDB(String name) {
+        Log.w("myApp", "El nombre de la tabla era:" + DB_table);
+        Log.w("myApp", "El nombre por el que se quiere cambiar la tabla es:" + name);
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (!existTable()) {
+            createTable(db);
+            db.execSQL("ALTER TABLE " + DB_table + " RENAME TO " + name);
+        }
+        setTableName();
+        Log.w("myApp", "El nombre de la lista es:" + DB_table);
     }
 }

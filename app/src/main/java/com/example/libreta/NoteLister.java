@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -50,7 +49,7 @@ public class NoteLister extends Fragment {
                         String Templistview = listItems.get(position);
                         Templistview = Templistview.substring(0, Templistview.lastIndexOf('.'));
                         Intent intent = new Intent(NoteLister.this.getActivity(), NoteEditor.class);
-                        intent.putExtra("Titulo", Templistview);
+                        intent.putExtra("Title", Templistview);
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     }
@@ -93,7 +92,6 @@ public class NoteLister extends Fragment {
         final List<String> listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
         listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
         noteList.setAdapter(listAdapter);
-        Log.w("myApp", "Tamaño: " + listItems.size());
     }
 
     private List<String> getList(File directory) {
