@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import java.util.List;
 public class NoteLister extends Fragment {
 
     private ListView noteList;
+    ArrayList<String> listItems;
     private ArrayAdapter<String> listAdapter;
 
     @Override
@@ -33,28 +35,15 @@ public class NoteLister extends Fragment {
         //Fill the note list
         noteList = view.findViewById(R.id.lista_libreta);
         //The folder Libreta must be created
-        final List<String> listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
+        listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
         listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
         noteList.setAdapter(listAdapter);
 
         registerForContextMenu(noteList);
+        for (String s : listItems) {
+            Log.w("myApp", "nombre:" + s);
+        }
 
-        noteList.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                        String Templistview = listItems.get(position);
-                        Templistview = Templistview.substring(0, Templistview.lastIndexOf('.'));
-                        Intent intent = new Intent(NoteLister.this.getActivity(), NoteEditor.class);
-                        intent.putExtra("Title", Templistview);
-                        startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    }
-                }
-        );
 
         return view;
     }
@@ -89,18 +78,37 @@ public class NoteLister extends Fragment {
 
     public void onResume() {
         super.onResume();
+        Log.w("myApp", "entra:");
         final List<String> listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
         listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
         noteList.setAdapter(listAdapter);
+
+        noteList.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                        String Templistview = listItems.get(position);
+                        Templistview = Templistview.substring(0, Templistview.lastIndexOf('.'));
+                        Intent intent = new Intent(NoteLister.this.getActivity(), NoteEditor.class);
+                        intent.putExtra("Title", Templistview);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    }
+                }
+        );
     }
 
-    private List<String> getList(File directory) {
+    private ArrayList<String> getList(File directory) {
 
         ArrayList<String> Files = new ArrayList<String>();
         String[] fileNames = directory.list();
         for (String fileName : fileNames) {
             if (fileName.endsWith(".txt")) {
                 Files.add(fileName);
+
             }
         }
         return Files;

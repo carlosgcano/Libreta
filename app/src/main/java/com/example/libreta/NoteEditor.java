@@ -29,7 +29,7 @@ public class NoteEditor extends AppCompatActivity {
     EditText title;
     EditText body_text;
     File raiz = new File(Environment.getExternalStorageDirectory(), "Libreta");
-
+    String tempholder = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class NoteEditor extends AppCompatActivity {
         body_text = findViewById(R.id.body_text);
 
         //Load a note if exist
-        String tempholder = getIntent().getStringExtra("Title");
+        tempholder = getIntent().getStringExtra("Title");
         if (!TextUtils.isEmpty(tempholder)) {
             title.setText(tempholder);
             File fichero = new File(raiz, tempholder + ".txt");
@@ -144,6 +144,7 @@ public class NoteEditor extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
+
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
