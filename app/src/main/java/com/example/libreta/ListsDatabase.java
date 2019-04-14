@@ -150,8 +150,9 @@ public class ListsDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         if (!existTable()) {
             createTable(db);
-            db.execSQL("ALTER TABLE " + DB_table + " RENAME TO " + name);
+            //db.execSQL("ALTER TABLE " + DB_table + " RENAME TO " + name);
         }
+        db.execSQL("ALTER TABLE " + DB_table + " RENAME TO " + name);
         setTableName();
         Log.w("myApp", "El nombre de la lista es:" + DB_table);
     }

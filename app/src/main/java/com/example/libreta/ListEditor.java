@@ -168,6 +168,7 @@ public class ListEditor extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     public void onResume() {
         super.onResume();
         if (!title.getText().toString().isEmpty()) {
@@ -178,9 +179,11 @@ public class ListEditor extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!title.getText().toString().isEmpty()) {
+                    //If title exist and is different from actual list_name
+                    if (!title.getText().toString().isEmpty() && !title.getText().toString().equals(list_name)) {
                         db.changeTableNameOnDB(title.getText().toString());
-                    } else {
+                    } else if (title.getText().toString().isEmpty()) {
+                        //If title is empty put default list name
                         db.changeTableNameOnDB(list_name);
                     }
                 }
@@ -194,8 +197,12 @@ public class ListEditor extends AppCompatActivity {
         super.finish();
         Log.w("myApp", "El titulo del activity en el finish es:" + title.getText().toString());
         Log.w("myApp", "El nombre de la lista en el finish es:" + list_name);
-        if (!title.getText().toString().equals(list_name)) {
+
+        //The database name will be changed if we modified the list title but we don't create tasks
+        if (!title.getText().toString().equals(list_name) && listItems.size() == 0) {
             Log.w("myApp", "Entra en equals?");
+            //Log.w("myApp", "Es empty? " + title.getText().toString().isEmpty());
+            //Log.w("myApp", "No hace match? " + !list_name.matches("LIST_[0-9]*_[0-9]*"));
             db.changeTableNameOnDB(title.getText().toString());
         }
 
@@ -204,26 +211,18 @@ public class ListEditor extends AppCompatActivity {
 
     private void fillTasks() {
         ArrayList<Integer> aux = new ArrayList<>();
-
         Cursor cursor = db.viewList();
-        /**if (cursor.getCount() == 0) {
-            Toast.makeText(this, "No data to show", Toast.LENGTH_SHORT).show();
-         } else {**/
-
             while (cursor.moveToNext()) {
                 listItems.add(cursor.getString(0));
                 if (cursor.getString(1).contains("Enable")) {
                     aux.add(cursor.getPosition());
                 }
-
             }
-
             adapter = new ArrayAdapter(this, R.layout.row_list_editor, listItems);
             tasklist.setAdapter(adapter);
             for (Integer i : aux) {
                 tasklist.setItemChecked(i, true);
             }
-        //}
     }
 
     public String getListName() {
