@@ -98,16 +98,9 @@ public class NoteEditor extends AppCompatActivity {
         boolean state;
         try {
             File file = new File(raiz, title.getText().toString() + ".txt");
-            if (raiz.exists()) {
-                BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                out.write(body_text.getText().toString());
-                out.close();
-            } else {
-                raiz.mkdirs();
-                BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                out.write(body_text.getText().toString());
-                out.close();
-            }
+            BufferedWriter out = new BufferedWriter(new FileWriter(file));
+            out.write(body_text.getText().toString());
+            out.close();
             state = true;
             notificar(state);
         } catch (Throwable t) {

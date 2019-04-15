@@ -25,6 +25,7 @@ public class NoteLister extends Fragment {
     private ListView noteList;
     ArrayList<String> listItems;
     private ArrayAdapter<String> listAdapter;
+    File raiz = new File(Environment.getExternalStorageDirectory(), "Libreta");
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,6 +35,9 @@ public class NoteLister extends Fragment {
         //Fill the note list
         noteList = view.findViewById(R.id.lista_libreta);
         //The folder Libreta must be created
+        if (!raiz.exists()) {
+            raiz.mkdirs();
+        }
         listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
         listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
         noteList.setAdapter(listAdapter);
@@ -95,7 +99,7 @@ public class NoteLister extends Fragment {
         );
     }
 
-    private ArrayList<String> getList(File directory) {
+    public ArrayList<String> getList(File directory) {
 
         ArrayList<String> Files = new ArrayList<String>();
         String[] fileNames = directory.list();

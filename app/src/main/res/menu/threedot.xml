@@ -3,5 +3,5 @@
 
     <item
         android:id="@+id/gdriveid"
-        android:title="gdrive1"></item>
+        android:title="Cargar notas en Google drive"></item>
 </menu>

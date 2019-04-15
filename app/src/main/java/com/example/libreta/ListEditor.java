@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -140,7 +139,6 @@ public class ListEditor extends AppCompatActivity {
             case android.R.id.home:
                 //Alert dialog if title is empty but not if title is empty and task list
                 if (TextUtils.isEmpty(title_list) && !emptyTaskList) {
-                    Log.w("myApp", "El numero de elementos es:" + listItems.size());
                     AlertDialog.Builder dialog = new AlertDialog.Builder(ListEditor.this);
                     dialog.setTitle("Precaución");
                     dialog.setMessage("Se va a guardar la lista sin título");
@@ -173,7 +171,7 @@ public class ListEditor extends AppCompatActivity {
         if (!title.getText().toString().isEmpty()) {
             fillTasks();
         }
-
+/**
         title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -188,7 +186,7 @@ public class ListEditor extends AppCompatActivity {
                 }
             }
         });
-
+ **/
     }
 
     @Override
