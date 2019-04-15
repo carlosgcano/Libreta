@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class ListsDatabase extends SQLiteOpenHelper {
 
@@ -125,7 +124,6 @@ public class ListsDatabase extends SQLiteOpenHelper {
 
     public boolean taskExistOnList(String task) {
         boolean res = true;
-        Log.w("myApp", "El nombre de la lista en el existtable es:" + DB_table);
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         String sql = "SELECT TASK FROM '" + DB_table + "' WHERE TASK='" + task + "'";
@@ -145,8 +143,7 @@ public class ListsDatabase extends SQLiteOpenHelper {
     }
 
     public void changeTableNameOnDB(String name) {
-        Log.w("myApp", "El nombre de la tabla era:" + DB_table);
-        Log.w("myApp", "El nombre por el que se quiere cambiar la tabla es:" + name);
+
         SQLiteDatabase db = this.getWritableDatabase();
         if (!existTable()) {
             createTable(db);
@@ -154,6 +151,5 @@ public class ListsDatabase extends SQLiteOpenHelper {
         }
         db.execSQL("ALTER TABLE " + DB_table + " RENAME TO " + name);
         setTableName();
-        Log.w("myApp", "El nombre de la lista es:" + DB_table);
     }
 }

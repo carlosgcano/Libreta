@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -40,10 +39,6 @@ public class NoteLister extends Fragment {
         noteList.setAdapter(listAdapter);
 
         registerForContextMenu(noteList);
-        for (String s : listItems) {
-            Log.w("myApp", "nombre:" + s);
-        }
-
 
         return view;
     }
@@ -78,7 +73,6 @@ public class NoteLister extends Fragment {
 
     public void onResume() {
         super.onResume();
-        Log.w("myApp", "entra:");
         final List<String> listItems = getList(new File(Environment.getExternalStorageDirectory(), "Libreta"));
         listAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item, listItems);
         noteList.setAdapter(listAdapter);

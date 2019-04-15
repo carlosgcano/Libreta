@@ -49,7 +49,6 @@ public class ListEditor extends AppCompatActivity {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         list_name = "LIST_" + sdf.format(new Date());
-        Log.w("myApp", "listname es:" + list_name);
 
         listItems = new ArrayList<>();
 
@@ -195,17 +194,10 @@ public class ListEditor extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        Log.w("myApp", "El titulo del activity en el finish es:" + title.getText().toString());
-        Log.w("myApp", "El nombre de la lista en el finish es:" + list_name);
-
         //The database name will be changed if we modified the list title but we don't create tasks
         if (!title.getText().toString().equals(list_name) && listItems.size() == 0) {
-            Log.w("myApp", "Entra en equals?");
-            //Log.w("myApp", "Es empty? " + title.getText().toString().isEmpty());
-            //Log.w("myApp", "No hace match? " + !list_name.matches("LIST_[0-9]*_[0-9]*"));
             db.changeTableNameOnDB(title.getText().toString());
         }
-
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
